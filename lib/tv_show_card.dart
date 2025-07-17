@@ -1,0 +1,76 @@
+import 'package:app2_series/rating_widget.dart';
+import 'package:app2_series/tv_show_model.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class TvShowCard extends StatelessWidget {
+  const TvShowCard({super.key, required this.tvShow, required this.index});
+
+  final TvShow tvShow;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
+    return Card(
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 18,
+        ),
+        leading: CircleAvatar(
+          backgroundColor: colorScheme.primary,
+          child: Text(
+            (index + 1).toString(),
+            style: GoogleFonts.lobster(
+              color: colorScheme.secondaryContainer,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        title: Text(
+          tvShow.title,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          tvShow.stream,
+          style: const TextStyle(fontSize: 15, fontStyle: FontStyle.italic),
+        ),
+        trailing: ratingWidget(number: tvShow.rating),
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(tvShow.title),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Streaming: ${tvShow.stream}'),
+                  const SizedBox(height: 10),
+                  Text('Rating: ${tvShow.rating}'),
+                  const SizedBox(height: 10),
+                  Text(tvShow.summary),
+                ],
+              ),
+              actions: [
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text(
+                    'FECHAR',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: colorScheme.primary,
+                    foregroundColor: colorScheme.onPrimary,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
