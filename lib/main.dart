@@ -5,9 +5,15 @@ import 'package:app2_series/tv_show_model.dart';
 import 'package:app2_series/tv_show_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => TvShowModel(),
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatefulWidget {
@@ -20,12 +26,28 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   final List<TvShow> tvShows = favTvShowList;
 
+  void addTvShow(tvShow) {
+    setState(() {
+      tvShows.add(tvShow);
+    });
+  }
+
+  void removeTvShow(TvShow tvShow) {
+    setState(() {
+      //final index = tvShows.indexWhere(
+      //(show) => show.title.toLowerCase() == tvShow.title.toLowerCase(),
+      //);
+      //tvShows.removeAt(index); //Se buscar uma remoção por atributo especifico
+      tvShows.remove(tvShow);
+    });
+  }
+
   //Screen control
   int currentScreenIndex = 0;
 
   List<Widget> get screens => [
-    TvShowScreen(tvShows: tvShows),
-    AddTvShowScreen(),
+    TvShowScreen(),
+    AddTvShowScreen(switchScreen: switchScreen),
   ];
 
   void switchScreen(int index) {
