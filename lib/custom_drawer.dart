@@ -1,17 +1,11 @@
+import 'package:app2_series/my_theme_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({
-    super.key,
-    required this.switchTheme,
-    required this.isDark,
-    required this.switchScreen,
-  });
-
-  final bool isDark;
-  final Function() switchTheme;
-  final Function(int) switchScreen;
+  const CustomDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +33,9 @@ class CustomDrawer extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
-                    onPressed: switchTheme,
+                    onPressed: context.read<MyThemeModel>().switchTheme,
                     label: const Text('MUDAR TEMA'),
-                    icon: isDark
+                    icon: context.watch<MyThemeModel>().isDark
                         ? const Icon(Icons.wb_sunny_rounded, size: 24)
                         : const Icon(Icons.nightlight_round_sharp, size: 24),
                     style: ElevatedButton.styleFrom(
@@ -58,9 +52,8 @@ class CustomDrawer extends StatelessWidget {
             title: const Text('Home'),
             onTap: () {
               Navigator.of(context).pop();
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                switchScreen(0);
-              });
+              context.go('/');
+              WidgetsBinding.instance.addPostFrameCallback((_) {});
             },
           ),
           ListTile(
@@ -68,9 +61,8 @@ class CustomDrawer extends StatelessWidget {
             title: const Text('Adicionar série'),
             onTap: () {
               Navigator.of(context).pop();
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                switchScreen(1);
-              });
+              context.go('/add');
+              WidgetsBinding.instance.addPostFrameCallback((_) {});
             },
           ),
         ],

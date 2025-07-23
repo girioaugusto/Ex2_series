@@ -1,6 +1,7 @@
 import 'package:app2_series/rating_widget.dart';
 import 'package:app2_series/tv_show_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -49,7 +50,16 @@ class TvShowCard extends StatelessWidget {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text(tvShow.title),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(tvShow.title),
+                  IconButton.outlined(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: Icon(Icons.close, size: 32),
+                  ),
+                ],
+              ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,9 +88,15 @@ class TvShowCard extends StatelessWidget {
                 ),
 
                 ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () {
+                    final index = context.read<TvShowModel>().tvShows.indexOf(
+                      tvShow,
+                    );
+                    Navigator.of(context).pop();
+                    context.go('/edit/$index');
+                  },
                   child: const Text(
-                    'FECHAR',
+                    'EDITAR',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   style: ElevatedButton.styleFrom(
